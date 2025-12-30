@@ -1,0 +1,112 @@
+# Monorepo: Django + Nuxt (Bun)
+############################################
+
+# --- OS ---
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# --- Logs ---
+*.log
+logs/
+
+############################################
+# Python / Django
+############################################
+
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.python-version
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+*.whl
+
+# Tests / coverage / typecheck
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.pyre/
+.ruff_cache/
+
+# Django runtime artifacts
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Celery / cache
+celerybeat-schedule
+celerybeat.pid
+
+############################################
+# Node / Nuxt / Vue
+############################################
+
+# Dependencies
+node_modules/
+
+# Nuxt outputs
+.nuxt/
+.output/
+dist/
+
+# Build tool caches
+.vite/
+.cache/
+
+# Env files (already covered above, but fine either way)
+# .env
+# .env.*
+# !.env.example
+
+############################################
+# Bun
+############################################
+# Keep the lockfile committed for reproducible installs
+!bun.lockb
+
+# Bun cache dirs (safe to ignore)
+.bun/
+bun-cache/
+.bun-cache/
+
+# If you use Turborepo or similar
+.turbo/
+
+############################################
+# Optional: Docker local overrides
+############################################
+docker-compose.override.yml
