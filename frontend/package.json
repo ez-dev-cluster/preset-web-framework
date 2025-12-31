@@ -1,8 +1,7 @@
 {
-  "name": "iu_pos_frontend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "frontend",
+  "type": "module",
+  "private": true,
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -10,18 +9,26 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
-  "private": true,
-  "devDependencies": {
-    "@types/luxon": "^3.7.1",
-    "vite-plugin-vuetify": "^2.1.2",
-    "vuetify": "^3.11.5"
-  },
   "dependencies": {
     "@mdi/font": "^7.4.47",
+    "@nuxt/eslint": "1.12.1",
     "@pinia/nuxt": "^0.11.3",
     "currency.js": "^2.0.4",
+    "eslint": "^9.0.0",
     "luxon": "^3.7.2",
+    "nuxt": "^4.2.2",
     "ofetch": "^1.5.1",
-    "pinia": "^3.0.4"
+    "pinia": "^3.0.4",
+    "vite-plugin-vuetify": "^2.1.2",
+    "vue": "^3.5.26",
+    "vue-router": "^4.6.4",
+    "vuetify": "^3.11.5"
+  },
+  "module": "index.js",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   }
 }
