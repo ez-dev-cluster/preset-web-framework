@@ -13,7 +13,7 @@
       <div class="text-center mb-6">
         <v-img
             src="/public/logo/tnp-logo.png"
-            max-width="180"
+            max-width="220"
             class="mx-auto mb-4"
             alt="TNP Thanapando"
             contain
@@ -63,7 +63,6 @@
         </v-alert>
 
         <v-btn
-            :disabled="!form"
             color="primary"
             size="large"
             type="submit"
@@ -92,6 +91,7 @@ import NonFieldError from "~/components/non-field-error.vue";
 
 const {$rules} = useNuxtApp();
 const authStore = useAuthStore()
+// const $err = useErrorStore()
 const form = ref(false)
 const show_password = ref(false)
 const username = ref('')
@@ -102,6 +102,7 @@ async function onSubmit() {
   if (!form.value) return
   const [_, error] = await authStore.login(username.value, password.value)
   if (error) {
+    // alert(error)
     // $err.handle(error)
     error_msg.value = error.data.detail
     return;

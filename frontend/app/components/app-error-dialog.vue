@@ -1,113 +1,269 @@
 <template>
-  <v-dialog v-model="errorStore.dialog" width="760">
-    <v-card v-if="errorStore.error">
-      <v-card-title class="text-center">
-        <div style="font-size: 48px;">
-          😱🥲🤔
+  <v-dialog
+      v-model="dialog_show_dev"
+      max-width="720"
+      persistent
+  >
+    <v-card class="error-card" max-width="720">
+      <!-- Header -->
+      <v-card-title class="text-center py-6">
+        <div class="emoji">⚠️</div>
+        <div class="title">เกิดข้อผิดพลาด</div>
+        <div class="subtitle">
+          ระบบพบเหตุไม่คาดฝัน กรุณาลองใหม่อีกครั้ง
         </div>
-        <small>
-          Oops! เกิดเหตุไม่คาดฝัน
-        </small>
       </v-card-title>
-      <v-divider/>
-      <v-card-text style="max-height: 500px; overflow: scroll">
-        <div>
-          <h4>ปัญหาที่เกิดขึ้น</h4>
-          <div class="pa-3 box">
-            <b class="text-red">
-              {{ errorStore.error.name }}
-            </b>
-            <div class="text-red">
-              {{ errorStore.error.message }}
+
+      <v-divider />
+
+      <!-- Content -->
+      <v-card-text class="content">
+        <!-- Error Summary -->
+        <section class="section">
+          <h4 class="section-title">รายละเอียดปัญหา</h4>
+          <div class="error-box">
+            <div class="error-name">
+              {{ errorStore.error?.name }}
+            </div>
+            <div class="error-message">
+              {{ errorStore.error?.message }}
             </div>
           </div>
-          <div v-if="user" class="mt-2">
-            <div class="pa-3 box">
-              <table>
-                <tbody>
-                <tr>
-                  <td class="pr-2">Datetime</td>
-<!--                  <td>{{ $datetime() }}</td>-->
-                </tr>
-                <tr>
-                  <td>User</td>
-                  <td>{{ user.id }} / {{ user.username }}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
+        </section>
+
+        <!-- User Info -->
+        <section v-if="user" class="section">
+          <h4 class="section-title">ข้อมูลผู้ใช้งาน</h4>
+          <div class="info-box">
+            <table>
+              <tbody>
+              <tr>
+                <td class="label">User</td>
+                <td>{{ user.id }} / {{ user.username }}</td>
+              </tr>
+              <tr>
+                <td class="label">Datetime</td>
+                <td>{{ new Date().toLocaleString() }}</td>
+              </tr>
+              </tbody>
+            </table>
           </div>
+        </section>
 
-          <p class="mt-2 pa-1">กรุณาแจ้งปัญหากับทางทีมพัฒนา ทางเราจะพยายามแก้ไขปัญหานี้ให้เร็วที่สุด</p>
-        </div>
+        <!-- Dev Info -->
+        <section v-if="showDev" class="section dev-section">
+          <h4 class="section-title">ข้อมูลสำหรับนักพัฒนา</h4>
 
-        <div class="mt-5" v-if="showDev">
-          <h4>ข้อมูลสำหรับนักพัฒนา</h4>
-
-          <div class="mt-2" v-if="errorStore.error instanceof FetchError">
-            <div class="text-caption">Request</div>
-            <div class="pa-3 box">
-              [{{ errorStore.error.options?.method }}]
-              {{ errorStore.error.request }}
+          <template v-if="errorStore.error instanceof FetchError">
+            <div class="dev-block">
+              <div class="dev-label">Request</div>
+              <code class="code-box">
+                [{{ errorStore.error.options?.method }}]
+                {{ errorStore.error.request }}
+              </code>
             </div>
 
-            <div class="mt-2 text-caption">Response</div>
-            <div class="pa-3 box">
-              <details open>
-                <summary>{{ errorStore.error.status }}, {{ errorStore.error.statusText }}</summary>
-                <v-divider class="my-2"></v-divider>
-                <code>
-                  {{ JSON.stringify(errorStore.error.data, null, 4) }}
-                </code>
-              </details>
+            <div class="dev-block">
+              <div class="dev-label">Response</div>
+              <code class="code-box">
+                {{ JSON.stringify(errorStore.error.data, null, 2) }}
+              </code>
             </div>
+          </template>
+
+          <div class="dev-block">
+            <div class="dev-label">Stack Trace</div>
+            <code class="code-box small">
+              {{ errorStore.error?.stack }}
+            </code>
           </div>
+        </section>
 
-          <div class="mt-2">
-            <div class="text-caption">Stack Trace</div>
-            <div class="pa-3 box" style="font-size: 12px; height: 100px; overflow: scroll;">
-              <code>{{ errorStore.error.stack }}</code>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-5 text-center">
-          <v-btn size="sm" color="primary" variant="text" class="pa-1 text-grey-darken-5 font-weight-light text-body-2"
-                 @click="toggleDeveloperDetail">
-            แสดงข้อมูลสำหรับนักพัฒนา
+        <!-- Toggle -->
+        <div class="text-center mt-4">
+          <v-btn
+              variant="text"
+              size="small"
+              color="grey-darken-1"
+              @click="toggleDeveloperDetail"
+          >
+            {{ showDev ? 'ซ่อนข้อมูลนักพัฒนา' : 'แสดงข้อมูลสำหรับนักพัฒนา' }}
           </v-btn>
         </div>
       </v-card-text>
 
-      <v-divider/>
-      <v-card-actions>
-        <v-spacer/>
-        <v-btn @click="errorStore.clear()">OK</v-btn>
+      <v-divider />
+
+      <!-- Action -->
+      <v-card-actions class="pa-4">
+        <v-spacer />
+        <v-btn
+            color="primary"
+            variant="flat"
+            @click="dialog_show_dev=false"
+        >
+          ตกลง
+        </v-btn>
       </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog
+      v-model="errorStore.dialog"
+      max-width="490"
+      persistent>
+    <v-card
+        rounded="xl"
+        class="pa-6 d-flex flex-column align-center text-center"
+        @dblclick.stop="errorStore.dialog=false;dialog_show_dev=true"
+    >
+
+      <!-- ICON -->
+      <v-icon
+          size="56"
+          color="error"
+          class="mb-4 my-3"
+      >
+        mdi-alert-circle-outline
+      </v-icon>
+
+      <!-- TITLE -->
+      <p class="text-h5 font-weight-bold mb-1">
+        เกิดข้อผิดพลาด
+      </p>
+
+      <!-- MESSAGE -->
+      <p class="text-body-1 text-medium-emphasis mb-6 mt-2">
+        เกิดข้อผิดพลาดบางอย่าง กรุณาลองใหม่อีกครั้ง
+      </p>
+
+      <!-- ACTION -->
+      <v-card-actions class="justify-center pa-0">
+        <v-btn
+            color="error"
+            variant="flat"
+            size="large"
+            rounded="lg"
+            min-width="120"
+            @click="errorStore.clear()"
+        >
+          OK
+        </v-btn>
+      </v-card-actions>
+
     </v-card>
   </v-dialog>
 </template>
 
-
 <script setup lang="ts">
-import {FetchError} from "ofetch";
+import { FetchError } from 'ofetch'
 
 const errorStore = useErrorStore()
 const userStore = useAuthStore()
-const user = computed(() => userStore.user)
 
+const user = computed(() => userStore.user)
 const showDev = ref(false)
+const dialog_show_dev = ref(false)
 
 function toggleDeveloperDetail() {
   showDev.value = !showDev.value
 }
-
 </script>
 
 <style scoped>
-.box {
-  border: 1px solid gray;
-  border-radius: 5px;
+.error-card {
+  border-radius: 16px;
+}
+
+/* Header */
+.emoji {
+  font-size: 48px;
+}
+.title {
+  font-size: 20px;
+  font-weight: 600;
+}
+.subtitle {
+  font-size: 14px;
+  color: #6b7280;
   margin-top: 4px;
+}
+
+/* Content */
+.content {
+  background-color: #fafafa;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* Boxes */
+.error-box {
+  background: #fff;
+  border: 1px solid #fee2e2;
+  border-left: 4px solid #ef4444;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.error-name {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.error-message {
+  color: #7f1d1d;
+  font-size: 14px;
+}
+
+.info-box {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.label {
+  padding-right: 12px;
+  color: #6b7280;
+}
+
+/* Dev section */
+.dev-section {
+  background: #f9fafb;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.dev-block {
+  margin-bottom: 12px;
+}
+
+.dev-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.code-box {
+  display: block;
+  background: #111827;
+  color: #e5e7eb;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  overflow-x: auto;
+}
+
+.code-box.small {
+  max-height: 120px;
+  overflow-y: auto;
 }
 </style>

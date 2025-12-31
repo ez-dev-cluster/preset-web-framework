@@ -40,6 +40,15 @@
         >
           Confirm Dialog
         </v-btn>
+
+        <v-btn
+            class="ml-2"
+            color="red"
+            prepend-icon="mdi-alert-circle-outline"
+            @click="showError"
+        >
+          Error Dialog
+        </v-btn>
       </v-card-text>
     </v-card>
 
@@ -113,7 +122,7 @@
 
 <script setup lang="ts">
 // import {AuthRepository} from "~/repositories/AuthRepository";
-
+const $err = useErrorStore()
 // const auth_store = useAuthStore()
 // const auth_repository = new AuthRepository()
 const user = ref(null)
@@ -145,6 +154,10 @@ async function confirmDialog(){
 //   user.value = null;
 // }
 
+function showError() {
+  const err_test = 'FetchError: [POST] "http://localhost:8000/api/token/": 401 Unauthorized'
+  $err.handle(err_test)
+}
 </script>
 
 <style scoped>
