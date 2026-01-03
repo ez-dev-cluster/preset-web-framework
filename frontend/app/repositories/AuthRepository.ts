@@ -1,4 +1,5 @@
 import BaseRepository from "~/repositories/BaseRepository";
+import {FetchError} from "ofetch";
 
 export class AuthRepository extends BaseRepository {
     async loginWithCredentials(username: string, password: string) {
@@ -16,7 +17,7 @@ export class AuthRepository extends BaseRepository {
         return this.ofetch('POST','/api/token/refresh/',{body});
     }
 
-    async fetchUser(){
+    async fetchUser(): Promise<Result<any, FetchError>>{
         return this.sfetch('GET','/api/user/me/');
     }
 }

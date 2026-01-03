@@ -88,25 +88,37 @@
 import {ref} from 'vue'
 import {navigateTo} from "#imports";
 import NonFieldError from "~/components/non-field-error.vue";
+import {FetchError} from "ofetch";
 
 const {$rules} = useNuxtApp();
-const authStore = useAuthStore()
-// const $err = useErrorStore()
+const auth_store = useAuthStore()
+const $err = useErrorStore()
 const form = ref(false)
 const show_password = ref(false)
 const username = ref('')
 const password = ref('')
 const error_msg = ref('')
 definePageMeta({ layout: 'blank' });
+
+function handleInCorrectPassword(error: Error) {
+  if (error instanceof FetchError) {
+    error_msg.value = error.data.message
+    return true
+  }
+  return false
+}
+
 async function onSubmit() {
   if (!form.value) return
-  const [_, error] = await authStore.login(username.value, password.value)
+  const [_, error] = await auth_store.login(username.value, password.value)
   if (error) {
-    // alert(error)
-    // $err.handle(error)
-    error_msg.value = error.data.detail
+    $err.handle(error, [handleInCorrectPassword,$err.handleUnexpectedError])
     return;
   }
+  navigateTo('/')
+}
+
+if (auth_store.is_authenticated) {
   navigateTo('/')
 }
 

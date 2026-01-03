@@ -27,7 +27,7 @@
               <v-icon color="grey-darken-1" icon="mdi-account-circle-outline" size="32" start/>
             </template>
 
-            <span class="hidden-sm-and-down font-weight-bold">{{ auth_store.user['me']['username'] }}</span>
+            <span class="hidden-sm-and-down font-weight-bold">{{ auth_store.user?.username }}</span>
 
             <v-menu activator="parent">
               <v-list density="compact" nav>
@@ -108,35 +108,6 @@
 
         </v-list>
 
-<!--        <v-list density="comfortable" nav slim>-->
-<!--          <v-list-subheader class="font-weight-bold">REPORT</v-list-subheader>-->
-
-<!--          <v-list-group fluid>-->
-<!--            <template #activator="{ props: activatorProps }">-->
-<!--              <v-list-item-->
-<!--                  v-bind="activatorProps"-->
-<!--                  prepend-icon="mdi-account-circle"-->
-<!--                  subtitle="Manage your account"-->
-<!--                  title="Account"-->
-<!--              />-->
-<!--            </template>-->
-
-<!--            <v-list-item link prepend-icon="mdi-circle-small" title="Downloads"/>-->
-
-<!--            <v-list-item link prepend-icon="mdi-circle-small" title="Subscriptions"/>-->
-
-<!--            <v-list-item link prepend-icon="mdi-circle-small" title="History"/>-->
-<!--          </v-list-group>-->
-
-<!--          <v-list-item-->
-<!--              v-for="(item, i) in applications"-->
-<!--              :key="i"-->
-<!--              link-->
-<!--              :prepend-icon="item.icon"-->
-<!--              rounded="lg"-->
-<!--              :title="item.title"-->
-<!--          />-->
-<!--        </v-list>-->
       </div>
 
       <template #append>
@@ -167,15 +138,11 @@
     </v-main>
   </v-layout>
 
-  <!--    <v-btn color="red" @click="logOut">log out</v-btn>-->
-  <!--    <slot/>-->
-
 </template>
 
 <script setup lang="ts">
 import {navigateTo} from "#imports";
 
-import {shallowRef} from 'vue'
 
 const auth_store = useAuthStore()
 
@@ -224,20 +191,6 @@ const favorites = [
   },
 ]
 
-const applications = [
-  {
-    icon: 'mdi-folder-outline',
-    title: 'รายงานยอดขายรวม ',
-  },
-  {
-    icon: 'mdi-chart-line',
-    title: 'Performance',
-  },
-  {
-    icon: 'mdi-chart-line',
-    title: 'Performance',
-  },
-]
 
 const appendItems = [
   {

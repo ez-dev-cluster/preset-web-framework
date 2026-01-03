@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {AuthRepository} from "~/repositories/AuthRepository";
 import {err} from "~/utils/tryCatch";
 import type {LoggedInUser} from "~/interfaces/user";
+import {FetchError} from "ofetch";
 
 export const useAuthStore = defineStore("authStore", {
     state: () => {
@@ -11,6 +12,10 @@ export const useAuthStore = defineStore("authStore", {
             user: null as LoggedInUser|null,
         };
     },
+    getters: {
+        is_authenticated: (state) => state.access_token !== '',
+    },
+
     actions: {
         async login(username: string, password: string) {
             const auth_repository = new AuthRepository();
