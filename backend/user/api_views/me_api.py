@@ -13,4 +13,4 @@ class UserMeSerializer(serializers.ModelSerializer):
 class UserMeAPIView(APIView):
     def get(self,request):
         out = UserMeSerializer(request.user).data
-        return Response({'me':out})
+        return Response(out)
