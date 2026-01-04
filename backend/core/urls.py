@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/user/', include('user.urls')),
+    path('table_reserves/', include("table_reserves.urls"))
 ]
