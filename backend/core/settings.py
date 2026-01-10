@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from core.env import load_env
+
+load_env()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,17 +24,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-mpwintpi5sy0nyhe979ol^iyps24)*n-%0+2sn%sb5z#lqg(85"
+DEFAULT_SECRET_KEY = (
+    "django-insecure-*ah$su&z*b2fgt!!1+lqk*j+b+dis4ik7opj#a5wee%x@82f3h"
+)
+SECRET_KEY = os.getenv("SECRET_KEY", DEFAULT_SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
-# Application definition
+DEFAULT_CSRF_TRUSTED_ORIGINS = "http://localhost:8000,http://127.0.0.1:8000"
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    "CSRF_TRUSTED_ORIGINS", DEFAULT_CSRF_TRUSTED_ORIGINS
+).split(",")
+
+
+# Django CORS Headers
+# https://pypi.org/project/django-cors-headers/
+
+DEFAULT_CORS = "http://localhost:3000,http://127.0.0.1:3000"
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", DEFAULT_CORS).split(",")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -42,6 +57,7 @@ INSTALLED_APPS = [
     "django_cleanup.apps.CleanupConfig",
     "corsheaders",
     "rest_framework",
+    "rest_framework_simplejwt",
     "file_manager",
     "user",
 ]
@@ -87,11 +103,14 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME", "postgres"),
+        "USER": os.getenv("DB_USER", "postgres"),
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
+        "HOST": os.getenv("DB_HOST", "127.0.0.1"),
+        "PORT": os.getenv("DB_PORT", "5432"),
     }
 }
 
@@ -113,7 +132,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-Auuth_USER_MODEL = "user.User"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

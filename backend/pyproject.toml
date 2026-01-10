@@ -11,4 +11,9 @@ dependencies = [
     "django-protected-media>=1.0.2",
     "djangorestframework>=3.16.1",
     "djangorestframework-simplejwt[crypto]>=5.5.1",
+    "psycopg2-binary>=2.9.11",
+    "python-dotenv>=1.2.1",
 ]
+
+[dependency-groups]
+google-cloud = ["google-auth>=2.47.0", "google-cloud-secret-manager>=2.26.0"]
